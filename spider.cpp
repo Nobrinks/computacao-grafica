@@ -18,9 +18,14 @@
 
 using namespace std;
 
+int const height = 800, length = 800;
+
 GLint click = 0;
 pair<GLdouble, GLdouble> pos;
 
+pair<GLdouble, GLdouble> normalize_coordinates(GLdouble x, GLfloat y){
+	return make_pair((2/length)*x -1, (-2/height)*y +1);
+}
 
 void spider_body(pair<GLdouble,GLdouble> pos, GLdouble radius, GLint stacks){
 	glBegin(GL_LINE_LOOP);
@@ -88,7 +93,7 @@ int main(int argc, char** argv) {
    glutInit(&argc, argv);            // Initialize GLUT
    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
    glutInitWindowPosition(200,200);
-   glutInitWindowSize(800,800);
+   glutInitWindowSize(length,height);
    glutCreateWindow("Tarefa 2");
    init();
    glutDisplayFunc(display);
