@@ -23,7 +23,7 @@ int const height = 800, length = 800;
 GLint click = 0;
 pair<GLdouble, GLdouble> pos;
 
-pair<GLdouble, GLdouble> normalize_coordinates(GLdouble x, GLfloat y){
+pair<GLdouble, GLdouble> normalize_coordinates(GLdouble x, GLdouble y){
 	return make_pair((2/length)*x -1, (-2/height)*y +1);
 }
 
