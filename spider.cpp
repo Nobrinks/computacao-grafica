@@ -6,13 +6,22 @@
  */
 
 #include <GL/glut.h>
-#include <math.h>
+#include <bits/stdc++.h>
+
+#define BLUE 0, 0, 1
+#define RED 1, 0, 0
+#define GREEN 0, 1, 0
+#define CYAN 0, 1, 1
+#define YELLOW 1, 1, 0
+#define BLACK 0, 0, 0
+#define WHITE 1, 1, 1
+
+using namespace std;
 
 GLint click = 0;
 GLdouble posx, posy;
-void move(){
-	movement +=
-}
+
+
 void spider_body(GLdouble x, GLdouble y, GLdouble radius, GLint stacks){
 	glBegin(GL_LINE_LOOP);
 	for(GLint i = 0; i<stacks; i++){
@@ -59,7 +68,7 @@ void init(){
 	glMatrixMode(GL_PROJECTION);
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	//glClear(GL_COLOR_BUFFER_BIT);
-	//definem o sistema de visualização; neste caso estão definindo o tipo de posição/projeção
+	//definem o sistema de visualizaï¿½ï¿½o; neste caso estï¿½o definindo o tipo de posiï¿½ï¿½o/projeï¿½ï¿½o
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
