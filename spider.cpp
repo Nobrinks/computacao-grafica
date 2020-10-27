@@ -19,16 +19,22 @@
 using namespace std;
 
 int const height = 800, length = 800, stacks = 1000;
+GLdouble const spider_body_r = 0.15, spider_head_r = 0.05;
 
-GLint click = 0;
 pair<GLdouble, GLdouble> pos, obj;
+GLdouble direcao;
 
-pair<GLdouble, GLdouble> normalize_coordinates(GLdouble x, GLdouble y){
+pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
 	return make_pair((2.0/(double)length)*x -1, (-2.0/(double)height)*y +1);
 }
 
-void spider_body(GLdouble radius){
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+GLdouble directionVector(pair<GLdouble, GLdouble> pos, pair<GLdouble, GLdouble> obj){
+	GLdouble theta = (180*(atan2(obj.second-pos.second, obj.first-pos.first)))/M_PI;;
+	if(theta < 0) theta += 360;
+	return theta-90;
+}
+
+void spiderBody(GLdouble radius){
 	glBegin(GL_LINE_LOOP);
 	for(GLint i = 0; i<stacks; i++){
 		glColor3f(0, 0, 255);
@@ -40,39 +46,42 @@ void spider_body(GLdouble radius){
 }
 
 void display(){
-	glClear (GL_COLOR_BUFFER_BIT);
-	//cout << pos.first << " " << pos.second << endl;
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
-	glScalef (1, 1, 0);
 	glTranslated(pos.first, pos.second, 0.0);
-	spider_body(0.2);//imagem cresce muito
-  	glPopMatrix();
+	spiderBody(spider_body_r);
+	glPushMatrix();
+	glRotated(direcao, 0.0, 0.0, 1.0);
+	glTranslated(0, spider_body_r+spider_head_r, 0.0);
+	spiderBody(spider_head_r);
+	glPopMatrix();
+	glPopMatrix();
   	glutSwapBuffers();
 }
 
 void mouse(GLint button, GLint state, GLint x, GLint y){
 	switch(button){
 		case GLUT_LEFT_BUTTON:
-			pos = normalize_coordinates(x,y);
-			click = 1;
+			if(state == GLUT_DOWN){
+				obj = normalizeCoordinates(x,y);
+				direcao = directionVector(pos, obj);
+				cout << direcao << endl;
+				pos = normalizeCoordinates(x,y);
+				glutPostRedisplay();
+			}
 			break;
 		default:
 			break;
 	}
-	glutPostRedisplay();
 }
 
 void init(){
-
-	click = 0;
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
 }
-
 
 int main(int argc, char** argv) {
    glutInit(&argc, argv);      
