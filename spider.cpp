@@ -7,6 +7,7 @@
 
 #include <GL/glut.h>
 #include <bits/stdc++.h>
+#include <math.h>
 
 #define BLUE 0, 0, 1
 #define RED 1, 0, 0
@@ -18,7 +19,8 @@
 
 using namespace std;
 
-int const height = 800, length = 800, stacks = 1000;
+int const height = 800, length = 800, stacks = 1000, PI = 3.1415;
+double radian, speed = 0.1, rot;
 GLdouble const spider_body_r = 0.15, spider_head_r = 0.05;
 
 pair<GLdouble, GLdouble> pos, obj;
@@ -48,13 +50,13 @@ void spiderBody(GLdouble radius){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
-	glTranslated(pos.first, pos.second, 0.0);
-	spiderBody(spider_body_r);
-	glPushMatrix();
-	glRotated(direcao, 0.0, 0.0, 1.0);
-	glTranslated(0, spider_body_r+spider_head_r, 0.0);
-	spiderBody(spider_head_r);
-	glPopMatrix();
+		glTranslated(pos.first, pos.second, 0.0);
+		spiderBody(spider_body_r);
+		glPushMatrix();
+			glRotated(direcao, 0.0, 0.0, 1.0);
+			glTranslated(0, spider_body_r+spider_head_r, 0.0);
+			spiderBody(spider_head_r);
+		glPopMatrix();
 	glPopMatrix();
   	glutSwapBuffers();
 }
@@ -65,8 +67,7 @@ void mouse(GLint button, GLint state, GLint x, GLint y){
 			if(state == GLUT_DOWN){
 				obj = normalizeCoordinates(x,y);
 				direcao = directionVector(pos, obj);
-				cout << direcao << endl;
-				pos = normalizeCoordinates(x,y);
+				//pos = normalizeCoordinates(x,y);
 				glutPostRedisplay();
 			}
 			break;
@@ -75,6 +76,36 @@ void mouse(GLint button, GLint state, GLint x, GLint y){
 	}
 }
 
+void move_spider(){
+	GLdouble distance_x = obj.first - pos.first;
+	GLdouble distance_y = obj.second - pos.second;
+
+	if (sqrt(pow(distance_x,2) + pow(distance_y,2)) < speed){
+		pos.first = obj.first;
+		pos.second =obj.second;
+	}
+	else{
+		if (obj.first < pos.first){
+			pos.first -= speed;
+		}
+		else{
+			pos.first += speed;
+		}
+		if (obj.second < pos.second){
+			pos.second -= speed;
+		}
+		else{
+			pos.second += speed;
+		}
+	}
+}
+
+void update(int value){
+	move_spider();
+	glutPostRedisplay();
+	glutTimerFunc(50,update,0);
+
+}
 void init(){
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
@@ -92,6 +123,7 @@ int main(int argc, char** argv) {
    init();
    glutDisplayFunc(display);
    glutMouseFunc(mouse);
+   glutTimerFunc(50, update, 0);
    glutMainLoop();
    return EXIT_SUCCESS;
 }
