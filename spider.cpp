@@ -18,35 +18,35 @@
 
 using namespace std;
 
-int const height = 800, length = 800;
+int const height = 800, length = 800, stacks = 1000;
 
 GLint click = 0;
-pair<GLdouble, GLdouble> pos;
+pair<GLdouble, GLdouble> pos, obj;
 
 pair<GLdouble, GLdouble> normalize_coordinates(GLdouble x, GLdouble y){
-	return make_pair((2/length)*x -1, (-2/height)*y +1);
+	return make_pair((2.0/(double)length)*x -1, (-2.0/(double)height)*y +1);
 }
 
-void spider_body(pair<GLdouble,GLdouble> pos, GLdouble radius, GLint stacks){
+void spider_body(pair<GLdouble,GLdouble> pos, GLdouble radius){
 	glBegin(GL_LINE_LOOP);
 	for(GLint i = 0; i<stacks; i++){
 		glColor3f(0, 0, 255);
 		GLdouble theta = (2.0f * 3.14159265359 * i)/stacks;
 		GLdouble border_x = radius*cosf(theta), border_y = radius*sinf(theta);
-		glVertex2f(pos.first + border_x, pos.second + border_y);
+		glVertex2f(border_x, border_y);
 	}
 	glEnd();
 }
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT);
 
-	spider_body(pos, 0.5, 10000);//imagem cresce muito
+	spider_body(pos, 0.5);//imagem cresce muito
 	glScalef (1, 1, 0);
 	if(click==1){
 		//GLdouble pixelx = 220*(2.0/800.0) - 1, pixely = 1-220*(2.0/800.0);
 		//glPushMatrix();
 
-		spider_body(pos, 0.5, 10000);//imagem cresce muito
+		spider_body(pos, 0.5);//imagem cresce muito
 		glScalef (1, 1, 0);
 		//spider_body(pixelx,pixely, 0.5, 10000);//real, mal se mexe, quanto maior mais ele desce
 		//glPopMatrix();
@@ -56,14 +56,16 @@ void display(){
 void mouse(GLint button, GLint state, GLint x, GLint y){
 	switch(button){
 		case GLUT_LEFT_BUTTON:
-			pos = make_pair(x,y);
+			pos = normalize_coordinates(x,y);
 			click = 1;
+			break;
+		default:
 			break;
 		//case GLUT_RIGHT_BUTTON:
 		//	click = 2;
 		//	break;
 	}
-	display();
+	glutPostRedisplay();
 }
 
 void init(){
