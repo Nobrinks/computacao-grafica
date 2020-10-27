@@ -20,7 +20,7 @@
 using namespace std;
 
 int const height = 800, length = 800, stacks = 1000, PI = 3.1415;
-double radian, speed = 0.1, rot;
+GLdouble radian, speed = 0.05, rot;
 GLdouble const spider_body_r = 0.15, spider_head_r = 0.05;
 
 pair<GLdouble, GLdouble> pos, obj;
@@ -85,6 +85,18 @@ void move_spider(){
 		pos.second =obj.second;
 	}
 	else{
+		radian = (direcao+90)*M_PI / 180;
+		pos.first += cos(radian) * speed;
+		pos.second += sin(radian) * speed;
+		cout << "pos.first: " << pos.first<< endl;
+		cout << "pos.second: " << pos.second << endl;
+		cout << "X: " << cos(radian+90) * speed << endl;
+		cout << "Y: " << sin(radian+90) * speed << endl;
+		cout << "obj.first: " << obj.first<< endl;
+		cout << "obj.second: " << obj.second << endl;
+		cout << "radian: " << radian << endl;
+
+		/*
 		if (obj.first < pos.first){
 			pos.first -= speed;
 		}
@@ -95,8 +107,8 @@ void move_spider(){
 			pos.second -= speed;
 		}
 		else{
-			pos.second += speed;
-		}
+			pos.second += (speed*sin(direcao*M_PI/180));
+		}*/
 	}
 }
 
