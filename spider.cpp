@@ -2,7 +2,7 @@
  * spider.cpp
  *
  *  Created on: 23 de out. de 2020
- *      Author: Paulo Victor
+ *      Author: Paulo Victor, Vinicius Sathler, Igor Silva
  */
 
 #include <GL/glut.h>
