@@ -24,7 +24,7 @@ GLdouble radian, speed = 0.05, rot;
 GLdouble const spider_body_r = 0.15, spider_head_r = 0.05;
 
 pair<GLdouble, GLdouble> pos, obj;
-GLdouble direcao;
+GLdouble direcao, p1= 20, p2=0, p3=-20, p4=-40;
 
 pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
 	return make_pair((2.0/(double)length)*x -1, (-2.0/(double)height)*y +1);
@@ -39,7 +39,7 @@ GLdouble directionVector(pair<GLdouble, GLdouble> pos, pair<GLdouble, GLdouble> 
 void spiderBody(GLdouble radius){
 	glBegin(GL_LINE_LOOP);
 	for(GLint i = 0; i<stacks; i++){
-		glColor3f(0, 0, 255);
+		glColor3f(BLUE);
 		GLdouble theta = (2.0f * 3.14159265359 * i)/stacks;
 		GLdouble border_x = radius*cosf(theta), border_y = radius*sinf(theta);
 		glVertex2f(border_x, border_y);
@@ -47,13 +47,35 @@ void spiderBody(GLdouble radius){
 	glEnd();
 }
 
+void drawLeg(GLdouble posicao, GLdouble inclinacao){
+	glPushMatrix();
+			glRotated(-posicao, 0.0, 0.0, 1.0);
+			glTranslated(-spider_body_r, 0 , 0.0);
+			glBegin(GL_LINES);
+			glColor3f(BLUE);
+				glVertex3f(0, 0, 0);
+				glVertex3f(-spider_body_r, 0 , 0);
+			glEnd();
+			glTranslated(spider_body_r, 0 , 0.0);
+			glRotated(posicao, 0.0, 0.0, 1.0);
+	glPopMatrix();
+}
+
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
 		glTranslated(pos.first, pos.second, 0.0);
+		glRotated(direcao, 0.0, 0.0, 1.0);
 		spiderBody(spider_body_r);
+		drawLeg(180-p4, 0);
+		drawLeg(180-p3, 0);
+		drawLeg(180-p2, 0);
+		drawLeg(180-p1, 0);
+		drawLeg(p4, 0);
+		drawLeg(p3, 0);
+		drawLeg(p2, 0);
+		drawLeg(p1, 0);
 		glPushMatrix();
-			glRotated(direcao, 0.0, 0.0, 1.0);
 			glTranslated(0, spider_body_r+spider_head_r, 0.0);
 			spiderBody(spider_head_r);
 		glPopMatrix();
