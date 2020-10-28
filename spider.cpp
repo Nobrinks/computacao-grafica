@@ -21,10 +21,11 @@ using namespace std;
 
 int const height = 800, length = 800, stacks = 1000, PI = 3.1415;
 GLdouble radian, speed = 0.05, rot;
-GLdouble const spider_body_r = 0.15, spider_head_r = 0.05;
+GLdouble const spider_body_r = 0.15, spider_head_r = 0.05, leg_size = 0.08, paw_size = 0.07, articulacao = -20,inclinacao_max = -20;
 
 pair<GLdouble, GLdouble> pos, obj;
-GLdouble direcao, p1= 20, p2=0, p3=-20, p4=-40;
+GLdouble direcao, p1= 20, p2=0, p3=-20, p4=-40, inclinacao;
+bool inclinado;
 
 pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
 	return make_pair((2.0/(double)length)*x -1, (-2.0/(double)height)*y +1);
@@ -47,15 +48,29 @@ void spiderBody(GLdouble radius){
 	glEnd();
 }
 
-void drawLeg(GLdouble posicao, GLdouble inclinacao){
+void drawLeg(GLdouble posicao, GLdouble inclinacao, bool inclinado){
+	if(!inclinado) inclinacao = 0;
 	glPushMatrix();
 			glRotated(-posicao, 0.0, 0.0, 1.0);
 			glTranslated(-spider_body_r, 0 , 0.0);
+			glRotated(-inclinacao, 0.0, 0.0, 1.0);
+			glTranslated(-leg_size, 0 , 0.0);
+			if(posicao > 90 || posicao < -90) glRotated(articulacao, 0.0, 0.0, 1.0);
+			else glRotated(-articulacao, 0.0, 0.0, 1.0);
 			glBegin(GL_LINES);
 			glColor3f(BLUE);
 				glVertex3f(0, 0, 0);
-				glVertex3f(-spider_body_r, 0 , 0);
+				glVertex3f(-paw_size, 0 , 0);
 			glEnd();
+			if(posicao > 90 || posicao < -90) glRotated(-articulacao, 0.0, 0.0, 1.0);
+			else glRotated(articulacao, 0.0, 0.0, 1.0);
+			glTranslated(leg_size, 0 , 0.0);
+			glBegin(GL_LINES);
+			glColor3f(BLUE);
+				glVertex3f(0, 0, 0);
+				glVertex3f(-leg_size, 0 , 0);
+			glEnd();
+			glRotated(inclinacao, 0.0, 0.0, 1.0);
 			glTranslated(spider_body_r, 0 , 0.0);
 			glRotated(posicao, 0.0, 0.0, 1.0);
 	glPopMatrix();
@@ -67,14 +82,14 @@ void display(){
 		glTranslated(pos.first, pos.second, 0.0);
 		glRotated(direcao, 0.0, 0.0, 1.0);
 		spiderBody(spider_body_r);
-		drawLeg(180-p4, 0);
-		drawLeg(180-p3, 0);
-		drawLeg(180-p2, 0);
-		drawLeg(180-p1, 0);
-		drawLeg(p4, 0);
-		drawLeg(p3, 0);
-		drawLeg(p2, 0);
-		drawLeg(p1, 0);
+		drawLeg(180-p4, inclinacao, inclinado);
+		drawLeg(180-p3, inclinacao, !inclinado);
+		drawLeg(180-p2, inclinacao, inclinado);
+		drawLeg(180-p1, inclinacao, !inclinado);
+		drawLeg(p4, inclinacao, !inclinado);
+		drawLeg(p3, inclinacao, inclinado);
+		drawLeg(p2, inclinacao, !inclinado);
+		drawLeg(p1, inclinacao, inclinado);
 		glPushMatrix();
 			glTranslated(0, spider_body_r+spider_head_r, 0.0);
 			spiderBody(spider_head_r);
@@ -89,7 +104,6 @@ void mouse(GLint button, GLint state, GLint x, GLint y){
 			if(state == GLUT_DOWN){
 				obj = normalizeCoordinates(x,y);
 				direcao = directionVector(pos, obj);
-				//pos = normalizeCoordinates(x,y);
 				glutPostRedisplay();
 			}
 			break;
@@ -102,35 +116,18 @@ void move_spider(){
 	GLdouble distance_x = obj.first - pos.first;
 	GLdouble distance_y = obj.second - pos.second;
 
+	inclinado = !inclinado;
+
 	if (sqrt(pow(distance_x,2) + pow(distance_y,2)) < speed){
 		pos.first = obj.first;
 		pos.second =obj.second;
+		inclinacao = 0;
 	}
 	else{
+		inclinacao = inclinacao_max;
 		radian = (direcao+90)*M_PI / 180;
 		pos.first += cos(radian) * speed;
 		pos.second += sin(radian) * speed;
-		cout << "pos.first: " << pos.first<< endl;
-		cout << "pos.second: " << pos.second << endl;
-		cout << "X: " << cos(radian+90) * speed << endl;
-		cout << "Y: " << sin(radian+90) * speed << endl;
-		cout << "obj.first: " << obj.first<< endl;
-		cout << "obj.second: " << obj.second << endl;
-		cout << "radian: " << radian << endl;
-
-		/*
-		if (obj.first < pos.first){
-			pos.first -= speed;
-		}
-		else{
-			pos.first += speed;
-		}
-		if (obj.second < pos.second){
-			pos.second -= speed;
-		}
-		else{
-			pos.second += (speed*sin(direcao*M_PI/180));
-		}*/
 	}
 }
 
@@ -141,6 +138,7 @@ void update(int value){
 
 }
 void init(){
+	inclinado = false;
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glOrtho(-1, 1, -1, 1, -1, 1);
