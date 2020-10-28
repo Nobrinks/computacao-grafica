@@ -7,7 +7,6 @@
 
 #include <GL/glut.h>
 #include <bits/stdc++.h>
-#include <math.h>
 
 #define BLUE 0, 0, 1
 #define RED 1, 0, 0
