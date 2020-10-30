@@ -16,6 +16,8 @@
 #define BLACK 0, 0, 0
 #define WHITE 1, 1, 1
 
+#define NOCOLOR -1
+
 enum Estados{
 	P1, P2, P3
 };
@@ -33,9 +35,9 @@ enum Dados{
 
 using namespace std;
 
-int const height = 800, length = 800, stacks = 1000;
+int const height = 800, length = 800, stacks = 500;
 GLdouble radian, speed = 0.10;
-GLdouble const spider_body_r = 0.05, spider_head_r = 0.1;
+GLdouble const spider_body_r = 0.05, spider_back_r = 0.1, spider_eye_r = 0.015, spider_seye_r = 0.01;
 
 pair<GLdouble, GLdouble> pos, obj;
 GLdouble direcao, p1= 20, p2=0, p3=-20, p4=-40;
@@ -182,18 +184,49 @@ GLdouble directionVector(pair<GLdouble, GLdouble> pos, pair<GLdouble, GLdouble> 
 	return theta-90;
 }
 
-void spiderBody(GLdouble radius){
+void drawCircle(GLdouble radius, GLdouble R=0, GLdouble G=0, GLdouble B=0){
 	glBegin(GL_LINE_LOOP);
 	for(GLint i = 0; i<stacks; i++){
-		glColor3f(BLUE);
-		GLdouble theta = (2.0f * 3.14159265359 * i)/stacks;
+		glColor3f(R, G, B);
+		GLdouble theta = (2.0f * M_PI * i)/stacks;
 		GLdouble border_x = radius*cosf(theta), border_y = radius*sinf(theta);
 		glVertex2f(border_x, border_y);
 	}
 	glEnd();
 }
 
-void drawLeg(Pernas perna, Estados estado){
+void drawFilledCircle(GLdouble radius, GLdouble R=0, GLdouble G=0, GLdouble B=0,  GLdouble RC=NOCOLOR, GLdouble GC=NOCOLOR, GLdouble BC=NOCOLOR){
+	for(GLint i = 0; i<stacks; i++){
+		GLdouble theta = (2.0f * M_PI * i)/stacks;
+		GLdouble border_x = radius*cosf(theta), border_y = radius*sinf(theta);
+
+		GLdouble theta2 = (2.0f * M_PI * (i+1))/stacks;
+		GLdouble border_x2 = radius*cosf(theta2), border_y2 = radius*sinf(theta2);
+		glBegin(GL_TRIANGLE_STRIP);
+			glColor3f(R, G, B);
+			glVertex2f(0, 0);
+			glVertex2f(border_x, border_y);
+			glVertex2f(border_x2, border_y2);
+		glEnd();
+		if(RC == NOCOLOR) RC = R;
+		if(GC == NOCOLOR) GC = G;
+		if(BC == NOCOLOR) BC = B;
+		drawCircle(radius, RC, GC, BC);
+	}
+}
+
+void drawEye(GLdouble angulo, GLdouble radius, GLdouble distance, GLdouble R=0, GLdouble G=0, GLdouble B=0, GLdouble RC=NOCOLOR, GLdouble GC=NOCOLOR, GLdouble BC=NOCOLOR){
+	glPushMatrix();
+		glRotated(-angulo, 0.0, 0.0, 1.0);
+		glTranslated(-spider_body_r, 0.0, 0.0);		
+		drawFilledCircle(radius, R, G, B, RC, GC, BC);
+		glTranslated(spider_body_r, 0.0, 0.0);
+		glRotated(angulo, 0.0, 0.0, 1.0);
+	glPopMatrix();
+}
+
+
+void drawLeg(Pernas perna, Estados estado, GLdouble R=0, GLdouble G=0, GLdouble B=0){
 	glPushMatrix();
 		glRotated(-Val[perna][estado][POS], 0.0, 0.0, 1.0);
 		glTranslated(-spider_body_r, 0 , 0.0);
@@ -201,14 +234,14 @@ void drawLeg(Pernas perna, Estados estado){
 		glTranslated(-Val[perna][estado][FEMURS], 0 , 0.0);
 		glRotated(-Val[perna][estado][TIBIAI], 0.0, 0.0, 1.0);
 		glBegin(GL_LINES);
-			glColor3f(BLUE);
+			glColor3f(R, G, B);
 			glVertex3f(0, 0, 0);
 			glVertex3f(-Val[perna][estado][TIBIAS], 0 , 0);
 		glEnd();
 		glRotated(Val[perna][estado][TIBIAI], 0.0, 0.0, 1.0);
 		glTranslated(Val[perna][estado][FEMURS], 0 , 0.0);
 		glBegin(GL_LINES);
-			glColor3f(BLUE);
+			glColor3f(R, G, B);
 			glVertex3f(0, 0, 0);
 			glVertex3f(-Val[perna][estado][FEMURS], 0 , 0);
 		glEnd();
@@ -223,12 +256,17 @@ void display(){
 	glPushMatrix();
 		glTranslated(pos.first, pos.second, 0.0);
 		glRotated(direcao, 0.0, 0.0, 1.0);
-		spiderBody(spider_body_r);
-		for(int i = Pernas::L1; i<= Pernas::L8; i++) drawLeg(Pernas(i), estado);
+		
+		drawCircle(spider_body_r, BLACK);
+		for(int i = Pernas::L1; i<= Pernas::L8; i++) drawLeg(Pernas(i), estado, BLACK);
 		glPushMatrix();
-			glTranslated(0, -spider_body_r-spider_head_r, 0.0);
-			spiderBody(spider_head_r);
+			glTranslated(0, -spider_body_r-spider_back_r, 0.0);
+			drawCircle(spider_back_r, BLACK);
 		glPopMatrix();
+		drawEye(130, spider_seye_r, spider_body_r, WHITE, BLACK);
+		drawEye(50, spider_seye_r, spider_body_r, WHITE, BLACK);
+		drawEye(110, spider_eye_r, spider_body_r, WHITE, BLACK);
+		drawEye(70, spider_eye_r, spider_body_r, WHITE, BLACK);
 	glPopMatrix();
   	glutSwapBuffers();
 }
