@@ -32,39 +32,70 @@ enum Pernas{
 using namespace std;
 
 Estados estado;
-int const height = 800, length = 800;
-GLdouble r_torax, r_abd, direcao;
-
+int winHeight = 800, winWidth = 800, stacks = 500;
+GLdouble r_torax = 0.2, r_abd = 0.3, direcao;
 
 pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
-	return make_pair((2.0/(double)length)*x -1, (-2.0/(double)height)*y +1);
+	return make_pair((2.0/(double)winHeight)*x -1, (-2.0/(double)winWidth)*y +1);
 }
 
 void init(){
 	estado = Estados::P1;
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
-	glOrtho(-1, 1, -1, 1, -1, 1);
+    glLoadIdentity();
+	glOrtho(-2, 2, -2, 2, -2, 2);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
-void display(){
-    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void drawSpiderBody(){
     glPushMatrix();
 
     glColor3f(BLACK);
-    //gluSphere(gluNewQuadric(), 100, 100, 25);
-
+    glTranslated(0, 0, -1);
+    glutWireTeapot(0.2);
+    glTranslated(0, -r_abd-r_torax, 0);
+    glutWireSphere(r_abd, 50, 25);
+    
     glPopMatrix();
-    glutSwapBuffers();
+
 }
+
+void display(){
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    
+    glViewport(0, winHeight/2, winWidth/2, winHeight/2);
+    glLoadIdentity(); 
+    gluLookAt(0, 1, -1, 0, 0, -1, 0, 0, -1);
+    drawSpiderBody();
+    
+    
+    glViewport(winWidth/2, winHeight/2, winWidth/2, winHeight/2);
+    glLoadIdentity();//isso aqui faz com que as coisas que resete matrizes anteriores 
+    gluLookAt(-1, 0, -1, 0, 0, -1, 0, 1, 0);
+    drawSpiderBody();
+    
+    glViewport(0, 0, winHeight/2, winWidth/2);
+    glLoadIdentity();
+    gluLookAt(1.0, 1.0, 0, -0.2, 0, -1, 0, 1, 0);
+    drawSpiderBody();
+
+    glViewport(winWidth/2, 0,  winWidth/2, winHeight/2);
+    glLoadIdentity();
+    drawSpiderBody();
+    //glViewport(winWidth/2, winHeight/2, winWidth, winHeight/2);
+
+    glFlush();
+}
+
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);      
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowPosition(200,200);
-    glutInitWindowSize(length,height);
+    glutInitWindowSize(winWidth,winHeight);
     glutCreateWindow("Trabalho 2");
     init();
     glutDisplayFunc(display);
