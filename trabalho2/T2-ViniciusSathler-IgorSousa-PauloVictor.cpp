@@ -37,138 +37,138 @@ enum Pernas{
 };
 
 enum Dados{
-	APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+	APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
 };
 
 GLdouble const apos = 30;
 
-GLdouble Val[8][3][6] = {
+GLdouble Val[8][3][7] = {
     //LEN1
     {
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, -60, 45, 0.25, 90, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, -60, 45, 0, 0.25, 90, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 	//l2
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, -20, 45, 0.20, 60, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, -20, 45, 0, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 	//l3
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, 20, 45, 0.20, 60, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, 20, 45, 0, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 	//l4
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, 45, 45, 0.20, 60, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, 45, 45, 0, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 	//l5
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, -120, 45, 0.25, 90, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, -120, 45, 0, 0.25, 90, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 	//l6
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, -160, 45, 0.20, 60, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, -160, 45, 0, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 	//l7
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, -200, 45, 0.20, 60, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, -200, 45, 0, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 	//l8
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
-			apos, -225, 45, 0.20, 60, 0
+			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
+			apos, -225, 45, 0, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0, 0
 		}
 	},
 };
@@ -230,14 +230,17 @@ void drawLeg(Pernas perna){
 	inc_pos = Val[perna][estado][Dados::INCPOS],
 	pos_alpha = Val[perna][estado][Dados::APOS],
 	pos_omega = Val[perna][estado][Dados::OPOS],
-	l2 = Val[perna][estado][Dados::LEN2];
+	l2 = Val[perna][estado][Dados::LEN2],
+	desv_pos = Val[perna][estado][Dados::DESVPOS];
 
     glPushMatrix();
     glRotated(pos_omega, 0, 0, 1.0);
     glRotated(pos_alpha, 0, 1.0, 0);
     glTranslatef(-r_torax, 0, 0);
 
-    glRotated(-pos_alpha-inc_pos, 0, 1.0, 0);
+	glRotated(-pos_alpha, 0, 1.0, 0);
+	glRotated(-desv_pos, 0, 0, 1.0);
+	glRotated(-inc_pos, 0, 1.0, 0);
     glTranslated(-l1, 0, 0);
     glRotated(180-inc_articulacao, 0, 1.0, 0);
     glTranslated(-l2/2, 0, 0);
@@ -254,10 +257,13 @@ void drawLeg(Pernas perna){
     glPopMatrix();
     glTranslated(l1/2, 0, 0);
 
-    glRotated(pos_alpha+inc_pos, 0, 1.0, 0);
-
-    glTranslated(r_torax, 0, 0);
-    glRotated(-pos_alpha, 0, 1.0, 0);
+    glRotated(inc_pos, 0, 1.0, 0);
+	glRotated(desv_pos, 0, 0, 1.0);
+	glRotated(pos_alpha, 0, 1.0, 0);
+    
+	glTranslated(r_torax, 0, 0);
+    
+	glRotated(-pos_alpha, 0, 1.0, 0);
     glRotated(-pos_omega, 0, 0, 1.0);
     glPopMatrix();
 }
