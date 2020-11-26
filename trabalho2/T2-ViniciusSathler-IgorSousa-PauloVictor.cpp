@@ -37,138 +37,138 @@ enum Pernas{
 };
 
 enum Dados{
-	APOS, OPOS, INCPOS, L, INCART
+	APOS, OPOS, INCPOS, LEN1, INCART, LEN2
 };
 
 GLdouble const apos = 30;
 
-GLdouble const Val[8][3][5] = {
-    //l1
+GLdouble Val[8][3][6] = {
+    //LEN1
     {
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, -60, 45, 0.25, 90
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, -60, 45, 0.25, 90, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 	//l2
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, -20, 45, 0.20, 60
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, -20, 45, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 	//l3
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, 20, 45, 0.20, 60
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, 20, 45, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 	//l4
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, 45, 45, 0.20, 60
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, 45, 45, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 	//l5
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, -120, 45, 0.25, 90
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, -120, 45, 0.25, 90, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 	//l6
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, -160, 45, 0.20, 60
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, -160, 45, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 	//l7
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, -200, 45, 0.20, 60
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, -200, 45, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 	//l8
 	{
 		//p1
 		{
-			//APOS, OPOS, INCPOS, L, INCART
-			apos, -225, 45, 0.20, 60
+			//APOS, OPOS, INCPOS, LEN1, INCART, LEN2
+			apos, -225, 45, 0.20, 60, 0
 		},
 		//p2
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		},
 		//p3
 		{
-			0, 0, 0, 0, 0
+			0, 0, 0, 0, 0, 0
 		}
 	},
 };
@@ -177,7 +177,7 @@ using namespace std;
 
 Estados estado;
 int winHeight = 800, winWidth = 800, stacks = 500;
-GLdouble r_torax = 0.2, r_abd = 0.3, direcao, h_spider = 0;
+GLdouble r_torax = 0.2, r_abd = 0.3, direcao, h_spider = 0.0;
 
 pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
 	return make_pair((2.0/(double)winHeight)*x -1, (-2.0/(double)winWidth)*y +1);
@@ -189,8 +189,33 @@ char* textureFileNames[1] = {   // file names for the files from which texture i
        };
 GLUquadricObj *quadricObj = gluNewQuadric();
 
+void calcL2(){
+	GLdouble l1, inc_articulacao, inc_pos, pos_alpha, pos_omega, h_pos, hl, bl, l2;
+	for(int i=Pernas::L1; i <= Pernas::L8; i++){
+		l1 = Val[i][estado][Dados::LEN1];
+		inc_articulacao = Val[i][estado][Dados::INCART];
+		inc_pos = Val[i][estado][Dados::INCPOS];
+		pos_alpha = Val[i][estado][Dados::APOS];
+		pos_omega = Val[i][estado][Dados::OPOS];
+		h_pos = h_spider + (r_abd-r_torax) + r_torax*(1 - cos((90-pos_alpha)*M_PI/180.0));
+		hl = l1*(sin(inc_pos*(M_PI/180.0)));
+		bl = inc_pos + inc_articulacao - 90;
+		l2 = (hl + h_pos)/(cos(bl*(M_PI/180.0)));
+		Val[i][estado][Dados::LEN2] = l2;
+	}
+	for(int i=Pernas::L1; i <= Pernas::L8; i++){
+		for(int j = Estados::P2; j <= Estados::P3; j++){
+			Val[i][j][Dados::LEN1] = Val[i][Estados::P1][Dados::LEN1];
+			Val[i][j][Dados::LEN2] = Val[i][Estados::P1][Dados::LEN2];
+			Val[i][j][Dados::APOS] = Val[i][Estados::P1][Dados::APOS];
+			Val[i][j][Dados::OPOS] = Val[i][Estados::P1][Dados::OPOS];
+		}
+	}
+}
+
 void init(){
 	estado = Estados::P1;
+	calcL2();
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -200,13 +225,12 @@ void init(){
 }
 
 void drawLeg(Pernas perna){
-    GLdouble l1 = Val[perna][estado][Dados::L];
-    GLdouble inc_articulacao = Val[perna][estado][Dados::INCART], inc_pos = Val[perna][estado][Dados::INCPOS];
-
-    GLdouble pos_alpha = Val[perna][estado][Dados::APOS], pos_omega = Val[perna][estado][Dados::OPOS], h_pos = (r_abd-r_torax) + r_torax*(1 - cos((90-pos_alpha)*M_PI/180.0));
-    GLdouble hl = l1*(sin(inc_pos*(M_PI/180.0)));
-    GLdouble bl = inc_pos + inc_articulacao - 90;
-    GLdouble l2 = (hl + h_pos)/(cos(bl*(M_PI/180.0)));
+    GLdouble l1 = Val[perna][estado][Dados::LEN1],
+	inc_articulacao = Val[perna][estado][Dados::INCART], 
+	inc_pos = Val[perna][estado][Dados::INCPOS],
+	pos_alpha = Val[perna][estado][Dados::APOS],
+	pos_omega = Val[perna][estado][Dados::OPOS],
+	l2 = Val[perna][estado][Dados::LEN2];
 
     glPushMatrix();
     glRotated(pos_omega, 0, 0, 1.0);
