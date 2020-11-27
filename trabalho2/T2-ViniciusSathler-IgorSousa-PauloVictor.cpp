@@ -386,14 +386,11 @@ void display(){
     glLoadIdentity(); 
     gluLookAt(0, 1, -0.9, 0, 0, -1, 0, 0, -1);	
 	drawFloor();
-	glPushMatrix();
-	
-	glPopMatrix();
     drawSpiderBody();
     
     
     glViewport(winWidth/2, winHeight/2, winWidth/2, winHeight/2);
-    glLoadIdentity();//isso aqui faz com que as coisas que resete matrizes anteriores 
+    glLoadIdentity();
     gluLookAt(-1, 0.1, -0.9, 0, 0, -1, 0, 0, -1);
 	drawFloor();
     drawSpiderBody();
@@ -408,7 +405,6 @@ void display(){
     glLoadIdentity();
 	drawFloor();
     drawSpiderBody();
-    //glViewport(winWidth/2, winHeight/2, winWidth, winHeight/2);
 
     glFlush();
 }
