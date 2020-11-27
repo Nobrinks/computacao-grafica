@@ -198,7 +198,7 @@ char* textureFileNames[4] = {   // file names for the files from which texture i
             "textures/spider_fur.jpg",
 			"textures/walltxt.jpg",
 			"textures/floortxt.png",
-			""
+			"textures/spider_belly.jpg"
        };
 GLUquadricObj *quadricObj = gluNewQuadric();
 
@@ -472,23 +472,26 @@ void drawLeg(Pernas perna){
 void drawSpiderBody(){
     glPushMatrix();
         //glEnable(GL_TEXTURE_2D);
-        glBindTexture( GL_TEXTURE_2D, texID[0] );  // Bind texture #0 for use on the spider body.
+          // Bind texture #0 for use on the spider body.
         glColor3f(WHITE);
 
 		glRotated(direcao, 0, 0, 1.0);
-        //glTranslated(0, 0, -1);
-        //gluSphere(quadricObj, r_torax, 20, 20);
+        
 
         for(int i = Pernas::L1; i <= Pernas::L8; i++) drawLeg(Pernas(i));
 
-        glutWireSphere(r_torax, 20, 20);
+		glBindTexture( GL_TEXTURE_2D, texID[3] );
+		//glTranslated(0, 0, -1);
+		gluSphere(quadricObj, r_torax, 20, 20);
+        //glutWireSphere(r_torax, 20, 20);
 
         glTranslated(0, -r_abd-r_torax, 0);
         gluQuadricDrawStyle(quadricObj, GLU_FILL);
-        glutWireSphere(r_abd, 20, 20);
+        //glutWireSphere(r_abd, 20, 20);
 
-        //gluSphere(quadricObj, r_abd, 20, 20);
-        //gluQuadricTexture(quadricObj, GL_TRUE);
+		
+        gluSphere(quadricObj, r_abd, 20, 20);
+        gluQuadricTexture(quadricObj, GL_TRUE);
 
         
     glPopMatrix();
@@ -576,8 +579,16 @@ void keyboard(unsigned char key, int x, int y){
 void specialKeyboard(int key, int x, int y){
 	switch(key){
 		case GLUT_KEY_UP:
+			if(estado == Estados::P2) estado = Estados::P3;
+			else estado = Estados::P2;
 			pos.first = pos.first + vel*sin(((360-direcao)%360)*(M_PI/180));
 			pos.second = pos.second + vel*cos(((360-direcao)%360)*(M_PI/180));
+			break;
+		case GLUT_KEY_DOWN:
+			if(estado == Estados::P2) estado = Estados::P3;
+			else estado = Estados::P2;
+			pos.first = pos.first - vel*sin(((360-direcao)%360)*(M_PI/180));
+			pos.second = pos.second - vel*cos(((360-direcao)%360)*(M_PI/180));
 			break;
 		case GLUT_KEY_RIGHT:
 			estado = Estados::P1;
@@ -586,6 +597,9 @@ void specialKeyboard(int key, int x, int y){
 		case GLUT_KEY_LEFT:
 			estado = Estados::P1;
 			direcao = (direcao + 5)%360;
+			break;
+		default:
+			estado = Estados::P1;
 			break;
 	}
 	glutPostRedisplay();
