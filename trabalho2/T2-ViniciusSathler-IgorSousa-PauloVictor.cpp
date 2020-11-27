@@ -30,10 +30,7 @@ using namespace std;
 enum Estados{
 	P1, P2, P3
 };
-//	L1	L5
-//	L2	L6
-//	L3	L7
-//	L4	L8
+
 enum Pernas{
 	L1, L2, L3, L4, L5, L6, L7, L8
 };
@@ -189,7 +186,7 @@ map<Pernas, int> M = {
 
 Estados estado;
 int winHeight = 800, winWidth = 800, stacks = 500;
-GLdouble r_torax = 0.2, r_abd = 0.3, h_spider = 0.1, vel = 0.2;
+GLdouble r_torax = 0.2, r_abd = 0.3, r_eye = 0.05, h_spider = 0.1, vel = 0.2;
 GLint direcao;
 pair<GLdouble, GLdouble> pos;
 
@@ -469,6 +466,19 @@ void drawLeg(Pernas perna){
     glPopMatrix();
 }
 
+void drawEyes(GLdouble alpha, GLdouble beta){
+	glPushMatrix();
+		glRotated(beta, 0, 0, 1.0);
+		glRotated(alpha, 0, 1.0, 0);
+		glTranslated(-r_torax, 0, 0);
+		glColor3f(BLACK);
+		glutSolidSphere(r_eye, 20, 20);
+		glTranslated(r_torax, 0, 0);
+		glRotated(alpha, 0, 1.0, 0);
+		glRotated(beta, 0, 0, 1.0);
+    glPopMatrix();
+}
+
 void drawSpiderBody(){
     glPushMatrix();
         //glEnable(GL_TEXTURE_2D);
@@ -477,22 +487,23 @@ void drawSpiderBody(){
 
 		glRotated(direcao, 0, 0, 1.0);
         
-
+		//drawEyes(-30, -60);
         for(int i = Pernas::L1; i <= Pernas::L8; i++) drawLeg(Pernas(i));
 
+		glColor3f(WHITE);
 		glBindTexture( GL_TEXTURE_2D, texID[3] );
-		//glTranslated(0, 0, -1);
 		gluSphere(quadricObj, r_torax, 20, 20);
-        //glutWireSphere(r_torax, 20, 20);
+		glutWireSphere(r_torax, 20, 20);
 
         glTranslated(0, -r_abd-r_torax, 0);
         gluQuadricDrawStyle(quadricObj, GLU_FILL);
-        //glutWireSphere(r_abd, 20, 20);
+        
+	
+		glutWireSphere(r_abd, 20, 20);
 
 		
         gluSphere(quadricObj, r_abd, 20, 20);
         gluQuadricTexture(quadricObj, GL_TRUE);
-
         
     glPopMatrix();
 
