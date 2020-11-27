@@ -189,14 +189,11 @@ map<Pernas, int> M = {
 
 Estados estado;
 int winHeight = 800, winWidth = 800, stacks = 500;
-GLdouble r_torax = 0.2, r_abd = 0.3, h_spider = 0.1;
+GLdouble r_torax = 0.2, r_abd = 0.3, h_spider = 0.1, vel = 0.2;
 GLint direcao;
+pair<GLdouble, GLdouble> pos;
 
-pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
-	return make_pair((2.0/(double)winHeight)*x -1, (-2.0/(double)winWidth)*y +1);
-}
-
-GLuint texID[1];  // Texture ID's for the three textures.
+GLuint texID[2];  // Texture ID's for the three textures.
 char* textureFileNames[2] = {   // file names for the files from which texture images are loaded
             "textures/spider_fur.jpg",
 			"textures/walltxt.jpg"
@@ -257,51 +254,169 @@ void init(){
 }
 
 void drawFloor(){
+	GLdouble mx, rx, dx, my, ry, dy;
+	mx = pos.first;
+	while(mx >= 4) mx -=4;
+	while(mx < 0) mx += 4;
+	rx = mx/4;
+	dx = 4*(1-rx);
+
+	my = pos.second;
+	while(my >= 4) my -=4;
+	while(my < 0) my += 4;
+	ry = my/4;
+	dy = 4*(1-ry);
+
+	cout << ry << " " << my << " " << dy <<  " " << pos.second << endl;
 	glPushMatrix();
 		glTranslated(0, 0, max(r_abd, r_torax) + h_spider);
 		//glScaled(4.0, 4.0, 0.5);
-		glColor3f(RED);
+		glColor3f(WHITE);
 		glBegin(GL_QUADS);
-			glVertex3d(2, 2, 0);
-			glVertex3d(2, -2, 0);
+			glTexCoord2d(rx, ry);
 			glVertex3d(-2, -2, 0);
+			glTexCoord2d(1, ry);
+			glVertex3d(dx-2, -2, 0);
+			glTexCoord2d(1, 1);
+			glVertex3d(dx-2, dy-2, 0);
+			glTexCoord2d(rx, 1);
+			glVertex3d(-2, dy-2, 0);
+		glEnd();
+
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, ry);
+			glVertex3d(dx-2, -2, 0);
+			glTexCoord2d(rx, ry);
+			glVertex3d(2, -2, 0);
+			glTexCoord2d(rx, 1);
+			glVertex3d(2, dy-2, 0);
+			glTexCoord2d(0, 1);
+			glVertex3d(dx-2, dy-2, 0);
+		glEnd();
+
+		glBegin(GL_QUADS);
+			glTexCoord2d(rx, 0);
+			glVertex3d(-2, dy-2, 0);
+			glTexCoord2d(1, 0);
+			glVertex3d(dx-2, dy-2, 0);
+			glTexCoord2d(1, ry);
+			glVertex3d(dx-2, 2, 0);
+			glTexCoord2d(rx, ry);
 			glVertex3d(-2, 2, 0);
 		glEnd();
+
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, 0);
+			glVertex3d(dx-2, dy-2, 0);
+			glTexCoord2d(rx, 0);
+			glVertex3d(2, dy-2, 0);
+			glTexCoord2d(rx, ry);
+			glVertex3d(2, 2, 0);
+			glTexCoord2d(0, ry);
+			glVertex3d(dx-2, 2, 0);
+		glEnd();
+
+		
 		//glutSolidCube(1.0);
 		//glColor3f(BLACK);
 		//glutWireCube(1.0);
 		
 
-		glColor3f(YELLOW);
+
+		//parede 0 1
+		
 		glBegin(GL_QUADS);
+			glTexCoord2d(rx, 0);
 			glVertex3d(-2, 2, 0);
+			glTexCoord2d(rx, 1);
 			glVertex3d(-2, 2, -2);
+			glTexCoord2d(1, 1);
+			glVertex3d(dx-2, 2, -2);
+			glTexCoord2d(1, 0);
+			glVertex3d(dx-2, 2, 0);
+		glEnd();
+		
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, 0);
+			glVertex3d(dx-2, 2, 0);
+			glTexCoord2d(0, 1);
+			glVertex3d(dx-2, 2, -2);
+			glTexCoord2d(rx, 1);
 			glVertex3d(2, 2, -2);
+			glTexCoord2d(rx, 0);
 			glVertex3d(2, 2, 0);
 		glEnd();
-
-		glColor3f(BLUE);
+		
+		//parede 0 -1
 		glBegin(GL_QUADS);
+			glTexCoord2d(rx, 0);
 			glVertex3d(-2, -2, 0);
+			glTexCoord2d(rx, 1);
 			glVertex3d(-2, -2, -2);
+			glTexCoord2d(1, 1);
+			glVertex3d(dx-2, -2, -2);
+			glTexCoord2d(1, 0);
+			glVertex3d(dx-2, -2, 0);
+		glEnd();
+		
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, 0);
+			glVertex3d(dx-2, -2, 0);
+			glTexCoord2d(0, 1);
+			glVertex3d(dx-2, -2, -2);
+			glTexCoord2d(rx, 1);
 			glVertex3d(2, -2, -2);
+			glTexCoord2d(rx, 0);
 			glVertex3d(2, -2, 0);
 		glEnd();
 
-		glColor3f(CYAN);
+		
+		//parede -1 0
+
 		glBegin(GL_QUADS);
-			glVertex3d(-2, 2, 0);
-			glVertex3d(-2, 2, -2);
-			glVertex3d(-2, -2, -2);
+			glTexCoord2d(ry, 0);
 			glVertex3d(-2, -2, 0);
+			glTexCoord2d(ry, 1);
+			glVertex3d(-2, -2, -2);
+			glTexCoord2d(1, 1);
+			glVertex3d(-2, dy-2, -2);
+			glTexCoord2d(1, 0);
+			glVertex3d(-2, dy-2, 0);
+		glEnd();
+		
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, 0);
+			glVertex3d(-2, dy-2, 0);
+			glTexCoord2d(0, 1);
+			glVertex3d(-2, dy-2, -2);
+			glTexCoord2d(ry, 1);
+			glVertex3d(-2, 2, -2);
+			glTexCoord2d(ry, 0);
+			glVertex3d(-2, 2, 0);
 		glEnd();
 
-		glColor3f(GREEN);
+		// parede 1 0
+
 		glBegin(GL_QUADS);
-			glVertex3d(2, 2, 0);
-			glVertex3d(2, 2, -2);
-			glVertex3d(2, -2, -2);
+			glTexCoord2d(ry, 0);
 			glVertex3d(2, -2, 0);
+			glTexCoord2d(ry, 1);
+			glVertex3d(2, -2, -2);
+			glTexCoord2d(1, 1);
+			glVertex3d(2, dy-2, -2);
+			glTexCoord2d(1, 0);
+			glVertex3d(2, dy-2, 0);
+		glEnd();
+		
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, 0);
+			glVertex3d(2, dy-2, 0);
+			glTexCoord2d(0, 1);
+			glVertex3d(2, dy-2, -2);
+			glTexCoord2d(ry, 1);
+			glVertex3d(2, 2, -2);
+			glTexCoord2d(ry, 0);
+			glVertex3d(2, 2, 0);
 		glEnd();
 		
 	glPopMatrix();
@@ -356,7 +471,7 @@ void drawLeg(Pernas perna){
 void drawSpiderBody(){
     glPushMatrix();
         glEnable(GL_TEXTURE_2D);
-        glBindTexture( GL_TEXTURE_2D, texID[0] );  // Bind texture #0 for use on the spider body.
+        glBindTexture( GL_TEXTURE_2D, texID[1] );  // Bind texture #0 for use on the spider body.
         glColor3f(WHITE);
 
 		glRotated(direcao, 0, 0, 1.0);
@@ -414,9 +529,9 @@ void loadTextures() {
 	int width, height, nrChannels;
 	unsigned char *data;
 
-	glGenTextures(1, texID);
+	glGenTextures(2, texID);
 
-	for(int i = 0; i < 1;i++)
+	for(int i = 0; i < 2;i++)
 	{
         glBindTexture(GL_TEXTURE_2D, texID[i]);
         // set the texture wrapping/filtering options (on the currently bound texture object)
@@ -460,15 +575,16 @@ void keyboard(unsigned char key, int x, int y){
 void specialKeyboard(int key, int x, int y){
 	switch(key){
 		case GLUT_KEY_UP:
-			//estado = Estados::P1;
+			pos.first = pos.first + vel*sin(((360-direcao)%360)*(M_PI/180));
+			pos.second = pos.second + vel*cos(((360-direcao)%360)*(M_PI/180));
 			break;
 		case GLUT_KEY_RIGHT:
 			estado = Estados::P1;
-			direcao = ((int)direcao + 5)%360;
+			direcao = ((int)direcao - 5)%360;
 			break;
 		case GLUT_KEY_LEFT:
 			estado = Estados::P1;
-			direcao = (direcao - 5)%360;
+			direcao = (direcao + 5)%360;
 			break;
 	}
 	glutPostRedisplay();
