@@ -197,8 +197,9 @@ pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
 }
 
 GLuint texID[1];  // Texture ID's for the three textures.
-char* textureFileNames[1] = {   // file names for the files from which texture images are loaded
+char* textureFileNames[2] = {   // file names for the files from which texture images are loaded
             "textures/spider_fur.jpg",
+			"textures/walltxt.jpg"
        };
 GLUquadricObj *quadricObj = gluNewQuadric();
 
