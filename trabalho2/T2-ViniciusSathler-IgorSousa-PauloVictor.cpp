@@ -193,10 +193,12 @@ GLdouble r_torax = 0.2, r_abd = 0.3, h_spider = 0.1, vel = 0.2;
 GLint direcao;
 pair<GLdouble, GLdouble> pos;
 
-GLuint texID[2];  // Texture ID's for the three textures.
-char* textureFileNames[2] = {   // file names for the files from which texture images are loaded
+GLuint texID[4];  // Texture ID's for the three textures.
+char* textureFileNames[4] = {   // file names for the files from which texture images are loaded
             "textures/spider_fur.jpg",
-			"textures/walltxt.jpg"
+			"textures/walltxt.jpg",
+			"textures/floortxt.png",
+			""
        };
 GLUquadricObj *quadricObj = gluNewQuadric();
 
@@ -253,7 +255,7 @@ void init(){
 	glLoadIdentity();
 }
 
-void drawFloor(){
+void drawScenario(){
 	GLdouble mx, rx, dx, my, ry, dy;
 	mx = pos.first;
 	while(mx >= 4) mx -=4;
@@ -269,6 +271,9 @@ void drawFloor(){
 
 	cout << ry << " " << my << " " << dy <<  " " << pos.second << endl;
 	glPushMatrix();
+		glEnable(GL_TEXTURE_2D);
+        glBindTexture( GL_TEXTURE_2D, texID[2] );  // Bind texture #0 for use on the spider body.
+        glColor3f(WHITE);
 		glTranslated(0, 0, max(r_abd, r_torax) + h_spider);
 		//glScaled(4.0, 4.0, 0.5);
 		glColor3f(WHITE);
@@ -316,12 +321,8 @@ void drawFloor(){
 			glVertex3d(dx-2, 2, 0);
 		glEnd();
 
-		
-		//glutSolidCube(1.0);
-		//glColor3f(BLACK);
-		//glutWireCube(1.0);
-		
-
+		glBindTexture( GL_TEXTURE_2D, texID[1] );  // Bind texture #0 for use on the spider body.
+        glColor3f(WHITE);
 
 		//parede 0 1
 		
@@ -470,8 +471,8 @@ void drawLeg(Pernas perna){
 
 void drawSpiderBody(){
     glPushMatrix();
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture( GL_TEXTURE_2D, texID[1] );  // Bind texture #0 for use on the spider body.
+        //glEnable(GL_TEXTURE_2D);
+        glBindTexture( GL_TEXTURE_2D, texID[0] );  // Bind texture #0 for use on the spider body.
         glColor3f(WHITE);
 
 		glRotated(direcao, 0, 0, 1.0);
@@ -501,25 +502,25 @@ void display(){
     glViewport(0, winHeight/2, winWidth/2, winHeight/2);
     glLoadIdentity(); 
     gluLookAt(0, 1, -0.9, 0, 0, -1, 0, 0, -1);	
-	drawFloor();
+	drawScenario();
     drawSpiderBody();
     
     
     glViewport(winWidth/2, winHeight/2, winWidth/2, winHeight/2);
     glLoadIdentity();
     gluLookAt(-1, 0.1, -0.9, 0, 0, -1, 0, 0, -1);
-	drawFloor();
+	drawScenario();
     drawSpiderBody();
     
     glViewport(0, 0, winHeight/2, winWidth/2);
     glLoadIdentity();
     gluLookAt(1.0, 1.0, 0, -0.2, 0, -1, 0, 0, -1);
-	drawFloor();
+	drawScenario();
     drawSpiderBody();
 
     glViewport(winWidth/2, 0,  winWidth/2, winHeight/2);
     glLoadIdentity();
-	drawFloor();
+	drawScenario();
     drawSpiderBody();
 
     glFlush();
@@ -529,9 +530,9 @@ void loadTextures() {
 	int width, height, nrChannels;
 	unsigned char *data;
 
-	glGenTextures(2, texID);
+	glGenTextures(4, texID);
 
-	for(int i = 0; i < 2;i++)
+	for(int i = 0; i < 4;i++)
 	{
         glBindTexture(GL_TEXTURE_2D, texID[i]);
         // set the texture wrapping/filtering options (on the currently bound texture object)
