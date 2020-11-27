@@ -221,21 +221,9 @@ void calcLegs(){
 
 			inc_articulacao = 180 - inc_pos - ol;
 
-			/*
-			if(i == Pernas::L1 || i == Pernas::L2){
-				cout << inc_articulacao << " " << i << " " << j << endl;
-			}
-			*/
-
 			if(M[Pernas(i)] == j%2){
 				inc_articulacao += 20;
 			}
-
-			/*
-			if(i == Pernas::L1 || i == Pernas::L2){
-				cout << inc_articulacao << " " << i << " " << j << endl;
-			}
-			*/
 
 			Val[i][j][Dados::INCART] = inc_articulacao;
 
@@ -252,6 +240,8 @@ void calcLegs(){
 	}
 
 }
+
+
 void init(){
 	estado = Estados::P1;
 	calcLegs();
@@ -261,6 +251,24 @@ void init(){
 	glOrtho(-2, 2, -2, 2, -2, 2);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void drawFloor(){
+	glPushMatrix();
+		glTranslated(0, 0, max(r_abd, r_torax) + h_spider);
+		//glScaled(4.0, 4.0, 0.5);
+		glColor3f(RED);
+		glBegin(GL_QUADS);
+			glVertex3d(2, 2, 0);
+			glVertex3d(2, -2, 0);
+			glVertex3d(-2, -2, 0);
+			glVertex3d(-2, 2, 0);
+		glEnd();
+		//glutSolidCube(1.0);
+		//glColor3f(BLACK);
+		//glutWireCube(1.0);
+		
+	glPopMatrix();
 }
 
 void drawLeg(Pernas perna){
@@ -339,22 +347,26 @@ void display(){
     
     glViewport(0, winHeight/2, winWidth/2, winHeight/2);
     glLoadIdentity(); 
-    gluLookAt(0, 1, -1, 0, 0, -1, 0, 0, -1);
+    gluLookAt(0, 1, -0.9, 0, 0, -1, 0, 0, -1);
+	drawFloor();
     drawSpiderBody();
     
     
     glViewport(winWidth/2, winHeight/2, winWidth/2, winHeight/2);
     glLoadIdentity();//isso aqui faz com que as coisas que resete matrizes anteriores 
-    gluLookAt(-1, 0.1, -1, 0, 0, -1, 0, 0, -1);
+    gluLookAt(-1, 0.1, -0.9, 0, 0, -1, 0, 0, -1);
+	drawFloor();
     drawSpiderBody();
     
     glViewport(0, 0, winHeight/2, winWidth/2);
     glLoadIdentity();
     gluLookAt(1.0, 1.0, 0, -0.2, 0, -1, 0, 0, -1);
+	drawFloor();
     drawSpiderBody();
 
     glViewport(winWidth/2, 0,  winWidth/2, winHeight/2);
     glLoadIdentity();
+	drawFloor();
     drawSpiderBody();
     //glViewport(winWidth/2, winHeight/2, winWidth, winHeight/2);
 
@@ -407,6 +419,7 @@ void keyboard(unsigned char key, int x, int y){
 	}
 	glutPostRedisplay();
 }
+
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);      
