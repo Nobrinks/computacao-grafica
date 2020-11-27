@@ -189,7 +189,8 @@ map<Pernas, int> M = {
 
 Estados estado;
 int winHeight = 800, winWidth = 800, stacks = 500;
-GLdouble r_torax = 0.2, r_abd = 0.3, direcao, h_spider = 0.1;
+GLdouble r_torax = 0.2, r_abd = 0.3, h_spider = 0.1;
+GLint direcao;
 
 pair<GLdouble, GLdouble> normalizeCoordinates(GLdouble x, GLdouble y){
 	return make_pair((2.0/(double)winHeight)*x -1, (-2.0/(double)winWidth)*y +1);
@@ -244,6 +245,7 @@ void calcLegs(){
 
 void init(){
 	estado = Estados::P1;
+	direcao = 0;
 	calcLegs();
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
@@ -267,6 +269,39 @@ void drawFloor(){
 		//glutSolidCube(1.0);
 		//glColor3f(BLACK);
 		//glutWireCube(1.0);
+		
+
+		glColor3f(YELLOW);
+		glBegin(GL_QUADS);
+			glVertex3d(-2, 2, 0);
+			glVertex3d(-2, 2, -2);
+			glVertex3d(2, 2, -2);
+			glVertex3d(2, 2, 0);
+		glEnd();
+
+		glColor3f(BLUE);
+		glBegin(GL_QUADS);
+			glVertex3d(-2, -2, 0);
+			glVertex3d(-2, -2, -2);
+			glVertex3d(2, -2, -2);
+			glVertex3d(2, -2, 0);
+		glEnd();
+
+		glColor3f(CYAN);
+		glBegin(GL_QUADS);
+			glVertex3d(-2, 2, 0);
+			glVertex3d(-2, 2, -2);
+			glVertex3d(-2, -2, -2);
+			glVertex3d(-2, -2, 0);
+		glEnd();
+
+		glColor3f(GREEN);
+		glBegin(GL_QUADS);
+			glVertex3d(2, 2, 0);
+			glVertex3d(2, 2, -2);
+			glVertex3d(2, -2, -2);
+			glVertex3d(2, -2, 0);
+		glEnd();
 		
 	glPopMatrix();
 }
@@ -322,7 +357,8 @@ void drawSpiderBody(){
         glEnable(GL_TEXTURE_2D);
         glBindTexture( GL_TEXTURE_2D, texID[0] );  // Bind texture #0 for use on the spider body.
         glColor3f(WHITE);
-       
+
+		glRotated(direcao, 0, 0, 1.0);
         //glTranslated(0, 0, -1);
         //gluSphere(quadricObj, r_torax, 20, 20);
 
@@ -336,6 +372,7 @@ void drawSpiderBody(){
 
         //gluSphere(quadricObj, r_abd, 20, 20);
         //gluQuadricTexture(quadricObj, GL_TRUE);
+
         
     glPopMatrix();
 
@@ -347,8 +384,11 @@ void display(){
     
     glViewport(0, winHeight/2, winWidth/2, winHeight/2);
     glLoadIdentity(); 
-    gluLookAt(0, 1, -0.9, 0, 0, -1, 0, 0, -1);
+    gluLookAt(0, 1, -0.9, 0, 0, -1, 0, 0, -1);	
 	drawFloor();
+	glPushMatrix();
+	
+	glPopMatrix();
     drawSpiderBody();
     
     
@@ -420,6 +460,23 @@ void keyboard(unsigned char key, int x, int y){
 	glutPostRedisplay();
 }
 
+void specialKeyboard(int key, int x, int y){
+	switch(key){
+		case GLUT_KEY_UP:
+			//estado = Estados::P1;
+			break;
+		case GLUT_KEY_RIGHT:
+			estado = Estados::P1;
+			direcao = ((int)direcao + 5)%360;
+			break;
+		case GLUT_KEY_LEFT:
+			estado = Estados::P1;
+			direcao = (direcao - 5)%360;
+			break;
+	}
+	glutPostRedisplay();
+}
+
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);      
@@ -431,6 +488,7 @@ int main(int argc, char** argv){
     loadTextures();
     glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(specialKeyboard);
     //glutMouseFunc(mouse);
     //glutTimerFunc(50, update, 0);
     glutMainLoop();
