@@ -46,7 +46,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -60, 45, 0, 0.0625, 90, 0
+			apos, -60, 45, 0, 0.25, 90, 0
 		},
 		//p2
 		{
@@ -62,7 +62,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -20, 45, 0, 0.05, 60, 0
+			apos, -20, 45, 0, 0.2, 60, 0
 		},
 		//p2
 		{
@@ -78,7 +78,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, 20, 45, 0, 0.05, 60, 0
+			apos, 20, 45, 0, 0.2, 60, 0
 		},
 		//p2
 		{
@@ -94,7 +94,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, 45, 45, 0, 0.05, 60, 0
+			apos, 45, 45, 0, 0.2, 60, 0
 		},
 		//p2
 		{
@@ -110,7 +110,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -120, 45, 0, 0.0625, 90, 0
+			apos, -120, 45, 0, 0.25, 90, 0
 		},
 		//p2
 		{
@@ -126,7 +126,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -160, 45, 0, 0.05, 60, 0
+			apos, -160, 45, 0, 0.2, 60, 0
 		},
 		//p2
 		{
@@ -142,7 +142,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -200, 45, 0, 0.05, 60, 0
+			apos, -200, 45, 0, 0.2, 60, 0
 		},
 		//p2
 		{
@@ -158,7 +158,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -225, 45, 0, 0.05, 60, 0
+			apos, -225, 45, 0, 0.2, 60, 0
 		},
 		//p2
 		{
@@ -185,7 +185,7 @@ map<Pernas, int> M = {
 
 Estados estado;
 int winHeight = 800, winWidth = 800, stacks = 500;
-GLdouble r_torax = 0.05, r_abd = 0.075, r_eye = 0.05, h_spider = 0.025, vel = 0.2;
+GLdouble r_torax = 0.2, r_abd = 0.3, r_eye = 0.05, h_spider = 0.1, vel = 0.2;
 GLint direcao;
 pair<GLdouble, GLdouble> pos;
 
@@ -246,9 +246,9 @@ void init(){
 	glEnable(GL_TEXTURE_2D);
 	calcLegs();
 	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-	glOrtho(-2, 2, -2, 2, -2, 2);
+//	glMatrixMode(GL_PROJECTION);
+  //  glLoadIdentity();
+//	glOrtho(-2, 2, -2, 2, -2, 2);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -496,7 +496,9 @@ void drawSpiderBody(){
 		glRotated(180, 1.0, 0, 0);
 		glRotated(180, 0, 0, 1.0);
 
-		//drawEyes(-30, -60);
+		drawEyes(-30, -60);
+		drawEyes(-30, -120);
+
         for(int i = Pernas::L1; i <= Pernas::L8; i++) drawLeg(Pernas(i));
 
 		glColor3f(WHITE);
@@ -527,22 +529,33 @@ void display(){
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	glFrustum(-2, 2, -2, 2, 1, 3);
-	gluLookAt(0, 0, 1, 0, 0, -1, 0, 1, 0);
+	glFrustum(-2, 2, -2, 2, 0.5, 3);
+	gluLookAt(0, 1.0, 0.5, 0, 0, -1, 0, 0, 1);
 	glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 	drawSpiderBody();
     drawScenario();
     
     glViewport(winWidth/2, winHeight/2, winWidth/2, winHeight/2);
     glLoadIdentity();
-    gluLookAt(1, 0, -0.5, 0, 0, -1, 0, 0, 1);
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	glFrustum(-2, 2, -2, 2, 0.5, 3);
+	gluLookAt(1.0, 0.0, 0.5, 0, 0, -1, 0, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     drawSpiderBody();
 	drawScenario();
     
     glViewport(0, 0, winHeight/2, winWidth/2);
     glLoadIdentity();
-    gluLookAt(0.5, 0.5, -0.5, 0, 0, -1, 0, 0, 1);
-    drawSpiderBody();
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	glFrustum(-2, 2, -2, 2, 0.5, 3);
+	gluLookAt(0.7, 0.7, 0.5, 0, 0, -1, 0, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+	drawSpiderBody();
 	drawScenario();
 
     glViewport(winWidth/2, 0,  winWidth/2, winHeight/2);
