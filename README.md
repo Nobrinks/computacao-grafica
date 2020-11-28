@@ -1,1 +1,3 @@
 # computacao-grafica
+
+foquei
