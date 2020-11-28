@@ -47,7 +47,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -60, 45, 0, 0.25, 90, 0
+			apos, -60, 45, 0, 0.0625, 90, 0
 		},
 		//p2
 		{
@@ -63,7 +63,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -20, 45, 0, 0.20, 60, 0
+			apos, -20, 45, 0, 0.05, 60, 0
 		},
 		//p2
 		{
@@ -79,7 +79,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, 20, 45, 0, 0.20, 60, 0
+			apos, 20, 45, 0, 0.05, 60, 0
 		},
 		//p2
 		{
@@ -95,7 +95,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, 45, 45, 0, 0.20, 60, 0
+			apos, 45, 45, 0, 0.05, 60, 0
 		},
 		//p2
 		{
@@ -111,7 +111,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -120, 45, 0, 0.25, 90, 0
+			apos, -120, 45, 0, 0.0625, 90, 0
 		},
 		//p2
 		{
@@ -127,7 +127,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -160, 45, 0, 0.20, 60, 0
+			apos, -160, 45, 0, 0.05, 60, 0
 		},
 		//p2
 		{
@@ -143,7 +143,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -200, 45, 0, 0.20, 60, 0
+			apos, -200, 45, 0, 0.05, 60, 0
 		},
 		//p2
 		{
@@ -159,7 +159,7 @@ GLdouble Val[8][3][7] = {
 		//p1
 		{
 			//APOS, OPOS, INCPOS, DESVPOS, LEN1, INCART, LEN2
-			apos, -225, 45, 0, 0.20, 60, 0
+			apos, -225, 45, 0, 0.05, 60, 0
 		},
 		//p2
 		{
@@ -186,7 +186,7 @@ map<Pernas, int> M = {
 
 Estados estado;
 int winHeight = 800, winWidth = 800, stacks = 500;
-GLdouble r_torax = 0.2, r_abd = 0.3, r_eye = 0.05, h_spider = 0.1, vel = 0.2;
+GLdouble r_torax = 0.05, r_abd = 0.075, r_eye = 0.05, h_spider = 0.025, vel = 0.2;
 GLint direcao;
 pair<GLdouble, GLdouble> pos;
 
@@ -243,6 +243,8 @@ void calcLegs(){
 void init(){
 	estado = Estados::P1;
 	direcao = 0;
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
 	calcLegs();
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
@@ -266,13 +268,13 @@ void drawScenario(){
 	ry = my/4;
 	dy = 4*(1-ry);
 
-	cout << ry << " " << my << " " << dy <<  " " << pos.second << endl;
 	glPushMatrix();
-		glEnable(GL_TEXTURE_2D);
         glBindTexture( GL_TEXTURE_2D, texID[2] );  // Bind texture #0 for use on the spider body.
         glColor3f(WHITE);
-		glTranslated(0, 0, max(r_abd, r_torax) + h_spider);
-		//glScaled(4.0, 4.0, 0.5);
+		glTranslated(0, 0, -max(r_abd, r_torax) - h_spider);
+		
+		//chao
+		
 		glColor3f(WHITE);
 		glBegin(GL_QUADS);
 			glTexCoord2d(rx, ry);
@@ -318,6 +320,8 @@ void drawScenario(){
 			glVertex3d(dx-2, 2, 0);
 		glEnd();
 
+		
+		
 		glBindTexture( GL_TEXTURE_2D, texID[1] );  // Bind texture #0 for use on the spider body.
         glColor3f(WHITE);
 
@@ -327,9 +331,9 @@ void drawScenario(){
 			glTexCoord2d(rx, 0);
 			glVertex3d(-2, 2, 0);
 			glTexCoord2d(rx, 1);
-			glVertex3d(-2, 2, -2);
+			glVertex3d(-2, 2, 2);
 			glTexCoord2d(1, 1);
-			glVertex3d(dx-2, 2, -2);
+			glVertex3d(dx-2, 2, 2);
 			glTexCoord2d(1, 0);
 			glVertex3d(dx-2, 2, 0);
 		glEnd();
@@ -338,9 +342,9 @@ void drawScenario(){
 			glTexCoord2d(0, 0);
 			glVertex3d(dx-2, 2, 0);
 			glTexCoord2d(0, 1);
-			glVertex3d(dx-2, 2, -2);
+			glVertex3d(dx-2, 2, 2);
 			glTexCoord2d(rx, 1);
-			glVertex3d(2, 2, -2);
+			glVertex3d(2, 2, 2);
 			glTexCoord2d(rx, 0);
 			glVertex3d(2, 2, 0);
 		glEnd();
@@ -350,9 +354,9 @@ void drawScenario(){
 			glTexCoord2d(rx, 0);
 			glVertex3d(-2, -2, 0);
 			glTexCoord2d(rx, 1);
-			glVertex3d(-2, -2, -2);
+			glVertex3d(-2, -2, 2);
 			glTexCoord2d(1, 1);
-			glVertex3d(dx-2, -2, -2);
+			glVertex3d(dx-2, -2, 2);
 			glTexCoord2d(1, 0);
 			glVertex3d(dx-2, -2, 0);
 		glEnd();
@@ -361,9 +365,9 @@ void drawScenario(){
 			glTexCoord2d(0, 0);
 			glVertex3d(dx-2, -2, 0);
 			glTexCoord2d(0, 1);
-			glVertex3d(dx-2, -2, -2);
+			glVertex3d(dx-2, -2, 2);
 			glTexCoord2d(rx, 1);
-			glVertex3d(2, -2, -2);
+			glVertex3d(2, -2, 2);
 			glTexCoord2d(rx, 0);
 			glVertex3d(2, -2, 0);
 		glEnd();
@@ -375,9 +379,9 @@ void drawScenario(){
 			glTexCoord2d(ry, 0);
 			glVertex3d(-2, -2, 0);
 			glTexCoord2d(ry, 1);
-			glVertex3d(-2, -2, -2);
+			glVertex3d(-2, -2, 2);
 			glTexCoord2d(1, 1);
-			glVertex3d(-2, dy-2, -2);
+			glVertex3d(-2, dy-2, 2);
 			glTexCoord2d(1, 0);
 			glVertex3d(-2, dy-2, 0);
 		glEnd();
@@ -386,9 +390,9 @@ void drawScenario(){
 			glTexCoord2d(0, 0);
 			glVertex3d(-2, dy-2, 0);
 			glTexCoord2d(0, 1);
-			glVertex3d(-2, dy-2, -2);
+			glVertex3d(-2, dy-2, 2);
 			glTexCoord2d(ry, 1);
-			glVertex3d(-2, 2, -2);
+			glVertex3d(-2, 2, 2);
 			glTexCoord2d(ry, 0);
 			glVertex3d(-2, 2, 0);
 		glEnd();
@@ -399,9 +403,9 @@ void drawScenario(){
 			glTexCoord2d(ry, 0);
 			glVertex3d(2, -2, 0);
 			glTexCoord2d(ry, 1);
-			glVertex3d(2, -2, -2);
+			glVertex3d(2, -2, 2);
 			glTexCoord2d(1, 1);
-			glVertex3d(2, dy-2, -2);
+			glVertex3d(2, dy-2, 2);
 			glTexCoord2d(1, 0);
 			glVertex3d(2, dy-2, 0);
 		glEnd();
@@ -410,12 +414,13 @@ void drawScenario(){
 			glTexCoord2d(0, 0);
 			glVertex3d(2, dy-2, 0);
 			glTexCoord2d(0, 1);
-			glVertex3d(2, dy-2, -2);
+			glVertex3d(2, dy-2, 2);
 			glTexCoord2d(ry, 1);
-			glVertex3d(2, 2, -2);
+			glVertex3d(2, 2, 2);
 			glTexCoord2d(ry, 0);
 			glVertex3d(2, 2, 0);
 		glEnd();
+		
 		
 	glPopMatrix();
 }
@@ -485,22 +490,28 @@ void drawSpiderBody(){
           // Bind texture #0 for use on the spider body.
         glColor3f(WHITE);
 
+
+
 		glRotated(direcao, 0, 0, 1.0);
         
+		glRotated(180, 1.0, 0, 0);
+		glRotated(180, 0, 0, 1.0);
+
 		//drawEyes(-30, -60);
         for(int i = Pernas::L1; i <= Pernas::L8; i++) drawLeg(Pernas(i));
 
 		glColor3f(WHITE);
+
 		glBindTexture( GL_TEXTURE_2D, texID[3] );
 		gluSphere(quadricObj, r_torax, 20, 20);
-		glutWireSphere(r_torax, 20, 20);
+		gluQuadricTexture(quadricObj, GL_TRUE);
+		//glutWireSphere(r_torax, 20, 20);
 
         glTranslated(0, -r_abd-r_torax, 0);
         gluQuadricDrawStyle(quadricObj, GLU_FILL);
         
 	
-		glutWireSphere(r_abd, 20, 20);
-
+		//glutWireSphere(r_abd, 20, 20);
 		
         gluSphere(quadricObj, r_abd, 20, 20);
         gluQuadricTexture(quadricObj, GL_TRUE);
@@ -514,28 +525,28 @@ void display(){
 
     
     glViewport(0, winHeight/2, winWidth/2, winHeight/2);
-    glLoadIdentity(); 
-    gluLookAt(0, 1, -0.9, 0, 0, -1, 0, 0, -1);	
-	drawScenario();
-    drawSpiderBody();
-    
+	glLoadIdentity(); 
+	gluLookAt(0, 0, 1, 0, 0, -1, 0, 1, 0);
+	drawSpiderBody();
+    drawScenario();
     
     glViewport(winWidth/2, winHeight/2, winWidth/2, winHeight/2);
     glLoadIdentity();
-    gluLookAt(-1, 0.1, -0.9, 0, 0, -1, 0, 0, -1);
-	drawScenario();
+    gluLookAt(1, 0, -0.5, 0, 0, -1, 0, 0, 1);
     drawSpiderBody();
+	drawScenario();
     
     glViewport(0, 0, winHeight/2, winWidth/2);
     glLoadIdentity();
-    gluLookAt(1.0, 1.0, 0, -0.2, 0, -1, 0, 0, -1);
-	drawScenario();
+    gluLookAt(0.5, 0.5, -0.5, 0, 0, -1, 0, 0, 1);
     drawSpiderBody();
+	drawScenario();
 
     glViewport(winWidth/2, 0,  winWidth/2, winHeight/2);
-    glLoadIdentity();
-	drawScenario();
+	glLoadIdentity();
+	gluLookAt(0, 0, 0, 0, 0, -1, 0, 1, 0);
     drawSpiderBody();
+	drawScenario();
 
     glFlush();
 }
@@ -619,7 +630,7 @@ void specialKeyboard(int key, int x, int y){
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);      
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(200,200);
     glutInitWindowSize(winWidth,winHeight);
     glutCreateWindow("Trabalho 2");
@@ -628,6 +639,7 @@ int main(int argc, char** argv){
     glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(specialKeyboard);
+	//glDepthFunc(GL_ALWAYS);
     //glutMouseFunc(mouse);
     //glutTimerFunc(50, update, 0);
     glutMainLoop();
