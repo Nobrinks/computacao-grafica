@@ -7,7 +7,6 @@
 
 #include <bits/stdc++.h>
 
-#include <GL/glew.h>
 #include <GL/glut.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -525,8 +524,12 @@ void display(){
 
     
     glViewport(0, winHeight/2, winWidth/2, winHeight/2);
-	glLoadIdentity(); 
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	glFrustum(-2, 2, -2, 2, 1, 3);
 	gluLookAt(0, 0, 1, 0, 0, -1, 0, 1, 0);
+	glMatrixMode(GL_MODELVIEW);
 	drawSpiderBody();
     drawScenario();
     
@@ -544,7 +547,10 @@ void display(){
 
     glViewport(winWidth/2, 0,  winWidth/2, winHeight/2);
 	glLoadIdentity();
-	gluLookAt(0, 0, 0, 0, 0, -1, 0, 1, 0);
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	glFrustum(-2, 2, -2, 2, 1, 3);
+	gluLookAt(0, 0, 2, 0, 0, -1, 0, 1, 0);
     drawSpiderBody();
 	drawScenario();
 
